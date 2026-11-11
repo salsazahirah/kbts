@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ad.orientation" content="landscape">
+    <meta name="google" content="notranslate" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>970x250 Banner</title>
+
+    <!-- Required Google Ads clickTag definition -->
+    <script type="text/javascript">
+        var clickTag = "https://gemini.google/id/students/?hl=id";
+    </script>
+
+    <!-- Official Google Ads Exit API Script -->
+    <script src="https://tpc.googlesyndication.com/pagead/gadgets/html5/api/exitapi.js" type="text/javascript"></script>
+
+    <script src="js/gsap.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: "Google Sans Flex";
+            src: url("assets/google-sans-flex.woff2") format("woff2");
+            font-weight: 100 1000;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "Google Sans";
+            src: url("assets/GoogleSans-Bold.woff2") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+        }
+        * { 
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Google Sans Flex", sans-serif;
+            font-optical-sizing: auto;
+        }
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .ads-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            width: 970px;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            background: url(assets/bg.jpg);
+            background-size: cover;
+            border: 1px solid #ddd;
+        }
+        .logo {
+            width: 235px;
+        }
+        .prompt-box {
+            position: relative;
+            width: 242px;
+            margin-bottom: 10px;
+        }
+        .prompt-text-container {
+            position: absolute;
+            top: 17px;
+            left: 17px;
+            right: 17px;
+            color: #fff;
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+        .prompt-line {
+            display: block;
+            white-space: pre;
+        }
+        .prompt-highlight {
+            color: #009bff;
+        }
+        .prompt-line.is-active::after {
+            content: "";
+            display: inline-block;
+            width: 1px;
+            height: 20px;
+            margin-left: 2px;
+            vertical-align: -4px;
+            background: #8ab4f8;
+            animation: cursor-blink 0.8s step-end infinite;
+        }
+        .title {
+            color: #fff;
+            font-family: "Google Sans", sans-serif;
+            font-weight: 700;
+            font-size: 36px;
+            line-height: 1;
+            margin-right: 5px;
+        }
+        .title-line {
+            display: block;
+            white-space: nowrap;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .prompt-line.is-active::after {
+                animation: none;
+            }
+        }
+        .link {
+            position: absolute;
+            inset: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ads-container">
+        <div class="logo">
+            <img src="assets/gemini-logo.png" alt="">
+        </div>
+        <div>
+            <div class="prompt-box" id="promptBox">
+                <img src="assets/prompt-box.png" alt="" loading="lazy">
+                <div class="prompt-text-container" aria-label="Kasih tau kesalahan yang sering dilakukan pemula saat main padel">
+                    <span class="prompt-line" aria-hidden="true"><span>Kasih tau </span><span class="prompt-highlight">kesalahan</span></span>
+                    <span class="prompt-line" aria-hidden="true"><span>yang sering dilakukan </span></span>
+                    <span class="prompt-line is-active" aria-hidden="true"><span class="prompt-highlight">pemula </span><span>saat </span><span class="prompt-highlight">main padel</span></span>
+                </div>
+            </div>
+            <div class="title">
+                <span class="title-line">Gemini-in</span>
+                <span class="title-line">apa hari ini?</span>
+            </div>
+        </div>
+        <div class="link"></div>
+    </div>
+    <script>
+        function startBannerAnimation() {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !window.gsap) {
+                return;
+            }
+
+            const lines = Array.from(document.querySelectorAll(".prompt-line"));
+            const segments = lines.map(function (line) {
+                return Array.from(line.children).map(function (element) {
+                    return { element: element, text: element.textContent };
+                });
+            });
+            const lineLengths = segments.map(function (line) {
+                return line.reduce(function (length, segment) {
+                    return length + segment.text.length;
+                }, 0);
+            });
+            const totalLength = lineLengths.reduce(function (sum, length) { return sum + length; }, 0);
+            const typing = { count: 0 };
+
+            function renderPrompt() {
+                let remaining = Math.floor(typing.count);
+                let activeLine = lines.length - 1;
+                let precedingLength = 0;
+
+                lines.forEach(function (line, index) {
+                    segments[index].forEach(function (segment) {
+                        const visibleLength = Math.max(0, Math.min(segment.text.length, remaining));
+                        segment.element.textContent = segment.text.slice(0, visibleLength);
+                        remaining -= segment.text.length;
+                    });
+                    if (typing.count >= precedingLength) {
+                        activeLine = index;
+                    }
+                    precedingLength += lineLengths[index];
+                });
+
+                lines.forEach(function (line, index) {
+                    line.classList.toggle("is-active", index === activeLine);
+                });
+            }
+
+            renderPrompt();
+            gsap.timeline({ repeat: -1, repeatDelay: 2.5 })
+                .set(".title-line, .prompt-box", { autoAlpha: 0 }, 0)
+                .set(".title-line", { y: 16 }, 0)
+                .call(function () {
+                    typing.count = 0;
+                    renderPrompt();
+                }, null, 0)
+                .to(".prompt-box", {
+                    autoAlpha: 1,
+                    duration: 0.45,
+                    ease: "power2.out"
+                }, 0.2)
+                .fromTo(typing, { count: 0 }, {
+                    count: totalLength,
+                    duration: 1.2,
+                    ease: "none",
+                    onUpdate: renderPrompt
+                }, "+=0.15")
+                .call(function () {
+                    lines.forEach(function (line) {
+                        line.classList.remove("is-active");
+                    });
+                }, null, "+=0.1")
+                .to(".title-line", {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.45,
+                    stagger: 0.14,
+                    ease: "power2.out"
+                }, "+=0.15");
+        }
+
+        if (window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.set(".title-line, .prompt-box", { autoAlpha: 0 });
+        }
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(startBannerAnimation);
+        } else {
+            startBannerAnimation();
+        }
+
+        document.querySelector(".link").addEventListener("click", () => {
+            ExitApi.exit();
+        });
+    </script>
+</body>
+</html>

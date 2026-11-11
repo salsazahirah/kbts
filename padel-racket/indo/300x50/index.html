@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="ad.orientation" content="landscape">
+    <meta name="google" content="notranslate" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>300x50 Banner</title>
+
+    <!-- Required Google Ads clickTag definition -->
+    <script type="text/javascript">
+        var clickTag = "https://gemini.google/id/students/?hl=id";
+    </script>
+
+    <!-- Official Google Ads Exit API Script -->
+    <script src="https://tpc.googlesyndication.com/pagead/gadgets/html5/api/exitapi.js" type="text/javascript"></script>
+
+    <script src="js/gsap.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: "Google Sans";
+            src: url("assets/GoogleSans-Bold.woff2") format("woff2");
+            font-weight: 700;
+            font-style: normal;
+        }
+        * { 
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Google Sans", sans-serif;
+            font-optical-sizing: auto;
+        }
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .ads-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            width: 300px;
+            height: 50px;
+            position: relative;
+            overflow: hidden;
+            background: url(assets/bg.jpg);
+            background-size: cover;
+            border: 1px solid #ddd;
+        }
+        .logo {
+            width: 80px;
+        }
+        .title {
+            color: #fff;
+            font-family: "Google Sans", sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 1;
+            margin-right: 5px;
+        }
+        .title-line {
+            display: block;
+            white-space: nowrap;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .prompt-line.is-active::after {
+                animation: none;
+            }
+        }
+        .link {
+            position: absolute;
+            inset: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ads-container">
+        <div class="logo">
+            <img src="assets/gemini-logo.png" alt="">
+        </div>
+        <div class="title">
+            <span class="title-line">Gemini-in</span>
+            <span class="title-line">apa hari ini?</span>
+        </div>
+        <div class="link"></div>
+    </div>
+    <script>
+        function startBannerAnimation() {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !window.gsap) {
+                return;
+            }
+
+            gsap.timeline({ repeat: -1, repeatDelay: 2.5 })
+                .set(".title-line", { autoAlpha: 0 }, 0)
+                .set(".title-line", { y: 16 }, 0)
+                .to(".title-line", {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.45,
+                    stagger: 0.14,
+                    ease: "power2.out"
+                }, "+=0.15");
+        }
+
+        if (window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.set(".title-line", { autoAlpha: 0 });
+        }
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(startBannerAnimation);
+        } else {
+            startBannerAnimation();
+        }
+
+        document.querySelector(".link").addEventListener("click", () => {
+            ExitApi.exit();
+        });
+    </script>
+</body>
+</html>
