@@ -48,7 +48,7 @@
         .ads-container {
             display: flex;
             flex-direction: column;
-            gap: 34px;
+            justify-content: space-between;
             padding: 25px 20px;
             width: 300px;
             height: 250px;
@@ -65,15 +65,12 @@
             color: #fff;
             font-family: "Google Sans", sans-serif;
             font-weight: 700;
-            font-size: 34px;
+            font-size: 32px;
             line-height: 1;
         }
         .title-line {
             display: block;
             white-space: nowrap;
-        }
-        .title-line:first-child {
-            margin-bottom: -4px;
         }
         @media (prefers-reduced-motion: reduce) {
             .prompt-line.is-active::after {
@@ -93,9 +90,7 @@
         </div>
         <div class="title">
             <span class="title-line">Gemini-in</span>
-            <span class="title-line">apa</span>
-            <span class="title-line">hari</span>
-            <span class="title-line">ini?</span>
+            <span class="title-line">apa hari ini?</span>
         </div>
         <div class="link"></div>
     </div>
